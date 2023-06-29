@@ -25,22 +25,6 @@ class Replacement(models.Model):
         return f'Смена №{self.pk} для {self.group}'
 
 
-class ReplacementStatus(models.Model):
-    code = models.CharField(verbose_name='Код', max_length=16, primary_key=True)
-    name = models.CharField(verbose_name='Название', max_length=32)
-    sort = models.PositiveIntegerField(verbose_name='Сортировка', blank=True, null=True)
-    is_active = models.BooleanField(verbose_name='Активность', default=True)
-
-
-    class Meta:
-        verbose_name = 'Статус смены'
-        verbose_name_plural = 'Статус Смен'
-        ordering = ('sort',)
-
-
-    def __str__(self):
-        return f'Смена {self.code} для {self.name}'
-
 
 
 class ReplacementEmployee(models.Model):
@@ -61,4 +45,7 @@ class ReplacementEmployee(models.Model):
 
     def __str__(self):
         return f'Смена {self.replacement} для {self.employee}'
+
+
+
 
