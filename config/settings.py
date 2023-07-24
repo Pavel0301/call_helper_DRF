@@ -3,6 +3,8 @@ from datetime import timedelta
 from pathlib import Path
 import environ
 
+
+
 root = environ.Path(__file__) - 2
 
 env = environ.Env()
@@ -16,6 +18,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = env.str('ALLOWED_HOSTS', default='').split(',')
+
 
 
 # base
@@ -35,12 +38,16 @@ INSTALLED_APPS += [
     'corsheaders',
     'djoser',
 
+    'phonenumber_field',
+
 ]
 
 INSTALLED_APPS += [
     'api',
     'common',
+    'users',
     'breaks',
+
 ]
 
 # AFTER APPS
@@ -241,3 +248,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),
 }
+
+
+AUTH_USER_MODEL = 'users.User'
+AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
