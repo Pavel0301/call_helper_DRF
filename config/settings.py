@@ -196,7 +196,7 @@ SPECTACULAR_SETTINGS = {
         'rest_framework.permissions.IsAuthenticated'],
 
     'SERVE_AUTHENTICATION': [
-        'rest_framework.authentication.BasicAuthentication'],
+        'rest_framework.authentication.BasicAuthentication'],   # AllowAny  более публичный
 
     'SWAGGER_UI_SETTINGS': {
         'DeepLinking': True,
