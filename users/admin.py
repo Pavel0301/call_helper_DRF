@@ -22,7 +22,8 @@ class UserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('phone_number',
                            'email',
-                           'username')}),
+                           'username',
+                           'is_corporate_account')}),
         (_('Личная информация'),
          {'fields': ('first_name', 'last_name',)}),
         (_('Permissions'), {

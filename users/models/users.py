@@ -20,6 +20,8 @@ class User(AbstractUser):
 
     REQUIRED_FIELDS = ['email']
 
+    is_corporate_account = models.BooleanField(verbose_name='Корпоративный акккаунт', default=False)
+
     objects = CustomUserManager()
 
     class Meta:
