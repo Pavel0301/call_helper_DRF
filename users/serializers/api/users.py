@@ -109,13 +109,7 @@ class MeUpdateSerializer(serializers.ModelSerializer):
             'profile',
         )
 
-    def validate(self, attrs):
-        user = self.instance
-        if user.is_corporate_account:
-            raise ParseError(
-                'У вас корпоративный аккаунт. Обратитесь к администратору для изменения данных профил'
-            )
-        return attrs
+
 
     def update(self, instance, validated_data):
         # проверка наличия профиля
@@ -138,3 +132,16 @@ class MeUpdateSerializer(serializers.ModelSerializer):
         profile_serializer.save()
 
         return instance
+
+
+
+
+class UserSearchListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username',
+            'full_name',
+        )
