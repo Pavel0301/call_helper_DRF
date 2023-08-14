@@ -60,7 +60,7 @@ class MeView(RetrieveUpdateAPIView):
 
 
 @extend_schema_view(
-    list=extend_schema(summary='Список пользователей Search', tags=['Пользователи']),
+    list=extend_schema(summary='Список пользователей Search', tags=['Словари']),
 
 )
 class UserListSearchView(ListViewSet):

@@ -1,8 +1,16 @@
-from drf_spectacular.utils import extend_schema_view, extend_schema
+import pdb
 
-from common.views.mixins import DictListViewMixin, ListViewSet, CRUViewSet
+from django.db.models import Count, When, Case
+from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema_view, extend_schema
+from rest_framework.filters import OrderingFilter, SearchFilter
+
+from common.views.mixins import DictListViewMixin, ListViewSet, LCRUViewSet
+from organisations.backends import MyOrganisation
+from organisations.filters import OrganisationFilter
 from organisations.models.dicts import Position
 from organisations.models.organisations import Organisation
+from organisations.permissions import IsMyOrganisation
 from organisations.serializers.api import organisations
 
 
@@ -23,23 +31,42 @@ class OrganisationSearchView(ListViewSet):
     partial_update=extend_schema(summary='Частичное изменение организации', tags=['Организации']),
 
 )
-class OrganisationView(CRUViewSet):
+class OrganisationView(LCRUViewSet):
+    permission_classes = [IsMyOrganisation]
     queryset = Organisation.objects.all()
     serializer_class = organisations.OrganisationListSerializer
 
+    multi_serializer_classes = {
+        'list': organisations.OrganisationListSerializer,
+        'retrieve': organisations.OrganisationRetrieveSerializer,
+        'create': organisations.OrganisationCreateSerializer,
+        'update': organisations.OrganisationUpdateSerializer,
+        'partial_update': organisations.OrganisationUpdateSerializer,
+    }
 
+    http_method_names = ('get', 'post', 'patch')
 
-    def get_serializer_class(self):
-        #if self.action == 'list':
-           # return organisations.OrganisationListSerializer
-        if self.action == 'retrieve':
-            return organisations.OrganisationRetrieveSerializer
-        elif self.action == 'create':
-            return organisations.OrganisationCreateSerializer
-        elif self.action == 'update':
-            return organisations.OrganisationUpdateSerializer
-        elif self.action == 'partial_update':
-            return organisations.OrganisationUpdateSerializer
+    filter_backends = (
+        OrderingFilter,
+        SearchFilter,
+        DjangoFilterBackend,
+        MyOrganisation,
+    )
+    filterset_class = OrganisationFilter
+    ordering = ('name', 'id',)
 
-        return self.serializer_class
-
+    def get_queryset(self):
+        queryset = Organisation.objects.select_related(
+            'director',
+        ).prefetch_related(
+            'employees',
+            'groups',
+        ).annotate(
+            pax=Count('employees', distinct=True),
+            groups_count=Count('groups', distinct=True),
+            can_manage=Case(
+                When(director=self.request.user, then=True),
+                default=False,
+            )
+        )
+        return queryset

@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 
 from common.models.mixins import InfoMixin, DateMixin
+from organisations.constants import DIRECTOR_POSITION
 from organisations.models.dicts import Position
 
 User = get_user_model()
@@ -14,7 +15,7 @@ class Organisation(InfoMixin):
     director = models.ForeignKey(
         to=User, on_delete=models.RESTRICT, related_name='organisations_directors', verbose_name='Директор'
     )
-    employee = models.ManyToManyField(
+    employees = models.ManyToManyField(
         to=User, related_name='organisations_employees', verbose_name='Сотрудники', blank=True, through='Employee'
     )
 
@@ -26,6 +27,13 @@ class Organisation(InfoMixin):
 
     def __str__(self):
         return f'{self.name}({self.pk})'
+
+    @property
+    def director_employee(self ):
+        obj, create = self.employee_info.get_or_create(
+            position_id=DIRECTOR_POSITION, defaults={'user': self.director,}
+        )
+        return obj
 
 
 

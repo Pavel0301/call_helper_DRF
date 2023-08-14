@@ -78,7 +78,13 @@ class EmployeeUpdateSerializer(ExtendedModelSerializer):
         fields = '__all__'
 
 
-class EmployeeDestroySerializer(ExtendedModelSerializer):
+class EmployeeDeleteSerializer(ExtendedModelSerializer):
+    class Meta:
+        model = Employee
+        fields = '__all__'
+
+
+class EmployeeSearchSerializer(ExtendedModelSerializer):
     class Meta:
         model = Employee
         fields = '__all__'

@@ -30,7 +30,7 @@ class ProfileBreakInline(admin.StackedInline): #(StackInline)
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'director')
 
-    filter_horizontal = ('employee',)
+    filter_horizontal = ('employees',)
     inlines = (EmployeeInline,)
 
     readonly_fields = (
