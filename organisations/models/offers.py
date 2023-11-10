@@ -27,11 +27,11 @@ class Offer(InfoMixin):
         def __str__(self):
             return f'Оффер №{self.pk}'
 
-        @property
-        def is_from_org(self):
-            return bool(self.user != self.created_by)
+    @property
+    def is_from_org(self):
+        return bool(self.user != self.created_by)
 
-        @property
-        def is_from_user(self):
-            return bool(self.user == self.created_by)
+    @property
+    def is_from_user(self):
+        return bool(self.user == self.created_by)
 

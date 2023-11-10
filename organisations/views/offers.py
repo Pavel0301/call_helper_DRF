@@ -13,8 +13,8 @@ from organisations.serializers.api import offers as offers_s
 
 @extend_schema_view(
     list=extend_schema(summary='Список офферов огранизации', tags=['Организации: Офферы']),
-    create = extend_schema(summary='Создать офферы организации', tags=['Организации: Офферы']),
-    partial_update = extend_schema(summary='Частично изменить оффер организации', tags=['Организации: Офферы']),
+    create=extend_schema(summary='Создать офферы организации', tags=['Организации: Офферы']),
+    partial_update=extend_schema(summary='Частично изменить оффер организации', tags=['Организации: Офферы']),
 )
 class OfferOrganisationView(ListCreateUpdateViewSet):
     permission_classes = [IsOfferManager]
@@ -84,8 +84,8 @@ class OfferUserView(ListCreateUpdateViewSet):
         DjangoFilterBackend,
         OrderingFilter,
     )
-    filterset_class = OfferUserFilter
+    #filterset_class = OfferUserFilter
     ordering_fields = ('created_at', 'updated_at',)
 
-    def get_queryset(self):
-        return OfferFactory().user_list()
+   # def get_queryset(self):
+      #  return OfferFactory().user_list()
